@@ -511,6 +511,12 @@
     <string name="past_24_hours">Past 24 hours</string>
     <string name="prefer_exoplayer_ffmpeg">Prefer FFmpeg for audio playback</string>
     <string name="prefer_exoplayer_ffmpeg_content">Use FFmpeg to decode audio, even if platform codecs are available.</string>
+    <string name="prefer_exoplayer_ass">Prefer ASS direct render</string>
+    <string name="prefer_exoplayer_ass_content">Use libass render ass, avoid server transcode.</string>
+    <string name="prefer_exoplayer_ass_mode">ASS render mode</string>
+    <string name="prefer_exoplayer_ass_mode_legacy">Legacy</string>
+    <string name="prefer_exoplayer_ass_mode_canvas">Canvas</string>
+    <string name="prefer_exoplayer_ass_mode_open_gl">OpenGL</string>
     <string name="default_video_zoom">Default zoom mode</string>
     <string name="video_start_delay">Video start delay</string>
     <string name="pref_mediasegment_actions">Media segment actions</string>

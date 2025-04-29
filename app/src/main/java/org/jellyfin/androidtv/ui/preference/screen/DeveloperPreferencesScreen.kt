@@ -7,9 +7,11 @@ import org.jellyfin.androidtv.BuildConfig
 import org.jellyfin.androidtv.R
 import org.jellyfin.androidtv.preference.SystemPreferences
 import org.jellyfin.androidtv.preference.UserPreferences
+import org.jellyfin.androidtv.preference.constant.AssBehavior
 import org.jellyfin.androidtv.ui.preference.dsl.OptionsFragment
 import org.jellyfin.androidtv.ui.preference.dsl.action
 import org.jellyfin.androidtv.ui.preference.dsl.checkbox
+import org.jellyfin.androidtv.ui.preference.dsl.enum
 import org.jellyfin.androidtv.ui.preference.dsl.optionsScreen
 import org.jellyfin.androidtv.util.isTvDevice
 import org.koin.android.ext.android.inject
@@ -62,6 +64,18 @@ class DeveloperPreferencesScreen : OptionsFragment() {
 				setContent(R.string.prefer_exoplayer_ffmpeg_content)
 
 				bind(userPreferences, UserPreferences.preferExoPlayerFfmpeg)
+			}
+
+			checkbox {
+				setTitle(R.string.prefer_exoplayer_ass)
+				setContent(R.string.prefer_exoplayer_ass_content)
+				bind(userPreferences, UserPreferences.assRenderEnabled)
+			}
+
+			enum<AssBehavior> {
+				setTitle(R.string.prefer_exoplayer_ass_mode)
+				bind(userPreferences, UserPreferences.subtitleAssRenderMode)
+				depends { userPreferences[UserPreferences.assRenderEnabled] }
 			}
 
 			@OptIn(ExperimentalCoilApi::class)

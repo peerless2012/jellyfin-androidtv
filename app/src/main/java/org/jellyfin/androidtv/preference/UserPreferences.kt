@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.preference.PreferenceManager
 import org.jellyfin.androidtv.preference.constant.AppTheme
+import org.jellyfin.androidtv.preference.constant.AssBehavior
 import org.jellyfin.androidtv.preference.constant.AudioBehavior
 import org.jellyfin.androidtv.preference.constant.ClockBehavior
 import org.jellyfin.androidtv.preference.constant.NextUpBehavior
@@ -118,6 +119,12 @@ class UserPreferences(context: Context) : SharedPreferenceStore(
 		 */
 		var ac3Enabled = booleanPreference("pref_bitstream_ac3", true)
 
+		/* Playback - Subtitle related */
+		/**
+		 * Enable ass render
+		 */
+		var assRenderEnabled = booleanPreference("pref_enable_ass_render", false)
+
 		/* Live TV */
 		/**
 		 * Use direct play
@@ -184,6 +191,11 @@ class UserPreferences(context: Context) : SharedPreferenceStore(
 		 * Subtitles font size
 		 */
 		var subtitlesTextSize = floatPreference("subtitles_text_size", 1f)
+
+		/**
+		 * How to render the ass.
+		 */
+		var subtitleAssRenderMode = enumPreference("pref_ass_behavior", AssBehavior.LEGACY)
 
 		/**
 		 * Show screensaver in app

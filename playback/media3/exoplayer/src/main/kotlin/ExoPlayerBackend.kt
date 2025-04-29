@@ -24,6 +24,9 @@ import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.ts.TsExtractor
 import androidx.media3.ui.SubtitleView
+import io.github.peerless2012.ass.media.AssHandler
+import io.github.peerless2012.ass.media.kt.withAssMkvSupport
+import io.github.peerless2012.ass.media.parser.AssSubtitleParserFactory
 import org.jellyfin.playback.core.backend.BasePlayerBackend
 import org.jellyfin.playback.core.mediastream.MediaStream
 import org.jellyfin.playback.core.mediastream.PlayableMediaStream
@@ -54,8 +57,13 @@ class ExoPlayerBackend(
 	private var currentStream: PlayableMediaStream? = null
 	private var subtitleView: SubtitleView? = null
 	private var audioPipeline = ExoPlayerAudioPipeline()
+	private var assHandler: AssHandler? = null
 
 	private val exoPlayer by lazy {
+		val assParserFactory = exoPlayerOptions.assRenderType?.let {
+			assHandler = AssHandler(it)
+			AssSubtitleParserFactory(assHandler!!)
+		}
 		ExoPlayer.Builder(context)
 			.setRenderersFactory(DefaultRenderersFactory(context).apply {
 				setEnableDecoderFallback(true)
@@ -100,8 +108,15 @@ class ExoPlayerBackend(
 					)
 					setConstantBitrateSeekingEnabled(true)
 					setConstantBitrateSeekingAlwaysEnabled(true)
+					assParserFactory?.let {
+						withAssMkvSupport(it, assHandler!!)
+					}
 				}
-			))
+			).apply {
+				assParserFactory?.let {
+					setSubtitleParserFactory(it)
+				}
+			})
 			.setAudioAttributes(AudioAttributes.Builder().apply {
 				setUsage(C.USAGE_MEDIA)
 			}.build(), true)
@@ -109,7 +124,7 @@ class ExoPlayerBackend(
 			.build()
 			.also { player ->
 				player.addListener(PlayerListener())
-
+				assHandler?.init(player)
 				if (exoPlayerOptions.enableDebugLogging) {
 					player.addAnalyticsListener(EventLogger())
 				}

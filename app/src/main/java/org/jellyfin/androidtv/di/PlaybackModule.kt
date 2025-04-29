@@ -6,10 +6,12 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
+import io.github.peerless2012.ass.media.type.AssRenderType
 import org.jellyfin.androidtv.BuildConfig
 import org.jellyfin.androidtv.R
 import org.jellyfin.androidtv.preference.UserPreferences
 import org.jellyfin.androidtv.preference.UserSettingPreferences
+import org.jellyfin.androidtv.preference.constant.AssBehavior
 import org.jellyfin.androidtv.ui.browsing.MainActivity
 import org.jellyfin.androidtv.ui.playback.GarbagePlaybackLauncher
 import org.jellyfin.androidtv.ui.playback.MediaManager
@@ -65,6 +67,15 @@ fun Scope.createPlaybackManager() = playbackManager(androidContext()) {
 		httpConnectTimeout = api.httpClientOptions.connectTimeout,
 		httpReadTimeout = api.httpClientOptions.requestTimeout,
 		preferFfmpeg = userPreferences[UserPreferences.preferExoPlayerFfmpeg],
+		assRenderType = if (userPreferences[UserPreferences.assRenderEnabled]) {
+			when(userPreferences[UserPreferences.subtitleAssRenderMode]) {
+				AssBehavior.LEGACY -> AssRenderType.LEGACY
+				AssBehavior.CANVAS -> AssRenderType.CANVAS
+				AssBehavior.OPEN_GL -> AssRenderType.OPEN_GL
+			}
+		} else {
+			null
+		} ,
 		enableDebugLogging = userPreferences[UserPreferences.debuggingEnabled],
 	)
 	install(exoPlayerPlugin(get(), exoPlayerOptions))
